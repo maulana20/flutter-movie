@@ -24,3 +24,7 @@ flutter run
 ```
 
 - daftarkan diri untuk mendapatkan api key pada https://www.themoviedb.org (free)
+
+Tampilan
+
+![demo](https://github.com/maulana20/flutter-movie/blob/master/demo.gif)

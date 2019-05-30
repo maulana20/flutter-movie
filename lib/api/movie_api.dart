@@ -4,7 +4,7 @@ import 'package:flutter_movies/model/movie_model.dart';
 import 'network.dart';
 
 class MovieApi {
-	final url = "https://api.themoviedb.org/3/";api_key
+	final url = "https://api.themoviedb.org/3/";
 	final api = "api_key";
 	
 	Network _net = new Network();
