@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+import 'movie/movie_detail_screen.dart';
+
 import '../model/movie.dart';
 import '../api/movie_api.dart';
 
@@ -40,8 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
 		);
 	}
 	
-	// BUTTON LIST
-	
 	Widget MenuButton() {
 		return IconButton(
 			icon: Icon( Icons.menu, semanticLabel: 'menu'),
@@ -50,6 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
 			},
 		);
 	}
+	
+	// BUTTON LIST
 	
 	List<Widget> SearchButton() {
 		return <Widget>[
@@ -121,44 +123,50 @@ class _HomeScreenState extends State<HomeScreen> {
 			childAspectRatio: 0.80,
 			children: List.generate(files.length, (index) {
 				if (files[index].poster_path != null) {
-					return _gridCard(files[index].poster_path, files[index].title);
+					print(files[index].title + '@' + files[index].original_title + '@' + files[index].poster_path);
+					return _gridCard(files[index]);
 				} else {
-					return _gridCard("https://dummyimage.com/300/09f.png/fff", null);
+					files[index].poster_path = "https://dummyimage.com/300/09f.png/fff";
+					files[index].title = null;
+					return _gridCard(files[index]);
 				}
 			}),
 		);
 	}
 	
-	Card _gridCard(String file, String title) {
+	Card _gridCard(Movie file) {
 		return Card(
-			child: Stack(
-				children: <Widget>[
-					Center(child: CircularProgressIndicator()),
-					Column(
-						crossAxisAlignment: CrossAxisAlignment.start,
-						children: <Widget>[
-							AspectRatio(
-								aspectRatio: 16.0 / 16.0,
-								child: FadeInImage.memoryNetwork(
-									placeholder: kTransparentImage,
-									image: "https://image.tmdb.org/t/p/w500" + file,
+			child: GestureDetector(
+				onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => MovieDetailScreen(file: file))),
+				child: Stack(
+					children: <Widget>[
+						Center(child: CircularProgressIndicator()),
+						Column(
+							crossAxisAlignment: CrossAxisAlignment.start,
+							children: <Widget>[
+								AspectRatio(
+									aspectRatio: 16.0 / 16.0,
+									child: FadeInImage.memoryNetwork(
+										placeholder: kTransparentImage,
+										image: file.title == null ? file.poster_path : "https://image.tmdb.org/t/p/w500" + file.poster_path,
+									),
 								),
-							),
-							Expanded(
-								child: Padding(
-									padding: EdgeInsets.fromLTRB(14.0, 8.0, 8.0, 8.0),
+								Padding(
+									padding: EdgeInsets.only(top: 5.0, left: 5.0, right: 5.0),
 									child: Column(
 										mainAxisAlignment: MainAxisAlignment.end,
 										crossAxisAlignment: CrossAxisAlignment.center,
 										children: <Widget>[
-											Text(title, style: TextStyle(fontSize: 11.0)),
+											Row(children: [Text(file.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0))]),
+											SizedBox(height: 1.0),
+											Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Row(children: [Icon(Icons.calendar_today, size: 8.0), Text(' '), Text(file.release_date, style: TextStyle(fontSize: 8.0))]), Text(file.original_language.toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.0))] ),
 										],
 									),
 								),
-							),
-						],
-					),
-				],
+							],
+						),
+					],
+				),
 			),
 		);
 	}
