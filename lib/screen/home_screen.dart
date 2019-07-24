@@ -16,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-	final String title = 'MOVIE';
+	final String title = 'FILM SAAT INI';
 	
 	bool _searching = false;
 	final inputController = TextEditingController();
@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 	void initState() {
 		super.initState();
 		_movieApi = MovieApi();
+		_discover();
 	}
 	
 	@override
@@ -38,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
 				title: _searching ? BuildSearch() : Text(title),
 				actions: _searching ? CloseButton() : SearchButton(),
 			),
-			body: _searching ? GridCard() : Center(child: Text('Lakukan pencarian berdasarkan nama film')),
+			body: GridCard(),
 		);
 	}
 	
@@ -80,7 +81,8 @@ class _HomeScreenState extends State<HomeScreen> {
 						
 						inputController.clear();
 						
-						_buildSearch('search query');
+						// _buildSearch('search query');
+						_discover();
 					});
 					
 				},
@@ -116,6 +118,14 @@ class _HomeScreenState extends State<HomeScreen> {
 		}
 	}
 	
+	Future _discover() async {
+		var discover = await _movieApi.discover();
+		setState(() {
+			files.clear();
+			files.addAll(discover.list);
+		});
+	}
+	
 	Widget GridCard() {
 		return GridView.count(
 			primary: true,
@@ -123,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
 			childAspectRatio: 0.80,
 			children: List.generate(files.length, (index) {
 				if (files[index].poster_path != null) {
-					print(files[index].title + '@' + files[index].original_title + '@' + files[index].poster_path);
+					// print(files[index].title + '@' + files[index].original_title + '@' + files[index].poster_path);
 					return _gridCard(files[index]);
 				} else {
 					files[index].poster_path = "https://dummyimage.com/300/09f.png/fff";
@@ -159,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
 										children: <Widget>[
 											Row(children: [Text(file.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0))]),
 											SizedBox(height: 1.0),
-											Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Row(children: [Icon(Icons.calendar_today, size: 8.0), Text(' '), Text(file.release_date, style: TextStyle(fontSize: 8.0))]), Text(file.original_language.toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.0))] ),
+											Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Row(children: [Icon(Icons.calendar_today, size: 8.0), SizedBox(width: 3.0), Text(file.release_date, style: TextStyle(fontSize: 8.0))]), Text(file.original_language.toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9.0))] ),
 										],
 									),
 								),

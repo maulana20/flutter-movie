@@ -16,7 +16,9 @@ class MovieDetailScreen extends StatelessWidget {
 				children: [
 					Row(children: [Text(file.original_title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0))]),
 					SizedBox(height: 5.0),
-					Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Row(children: [Icon(Icons.calendar_today, size: 12.0), SizedBox(width: 2.0), Text(file.release_date, style: TextStyle(fontSize: 12.0))]), Text(file.original_language.toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0))]),
+					Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Row(children: [Icon(Icons.calendar_today, size: 12.0), SizedBox(width: 5.0), Text(file.release_date, style: TextStyle(fontSize: 12.0))]), Row(children: [Icon(Icons.subtitles, size: 12.0), SizedBox(width: 5.0), Text(file.original_language.toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0))]) ]),
+					SizedBox(height: 5.0),
+					Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Row(children: [Icon(Icons.person, size: 12.0), SizedBox(width: 5.0), Text('${file.popularity}', style: TextStyle(fontSize: 12.0))]), Row(children: [Icon(Icons.grade, size: 12.0), SizedBox(width: 5.0), Text('${file.vote_count}', style: TextStyle(fontSize: 12.0))]) ]),
 				],
 			),
 		);

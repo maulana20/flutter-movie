@@ -18,4 +18,14 @@ class MovieApi {
 			return results;
 		});
 	}
+	
+	Future<MovieModel> discover() {
+		final params = { "api_key": api };
+		
+		return _net.post(url + "discover/movie?sort_by=popularity.desc", body: params).then((dynamic res) {
+			var results = MovieModel.getList(res["results"]);
+			results.status = 200;
+			return results;
+		});
+	}
 }
